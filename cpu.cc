@@ -5,22 +5,23 @@ __BEGIN_API
 
 void CPU::Context::save()
 {
-    //adicionar implementação
+    getcontext(&this->_context);
 }
 
 void CPU::Context::load()
 {
-    //adicionar implementação
+    setcontext(&this->_context);
 }
 
 CPU::Context::~Context()
 {
-    //adicionar implementação
+    free(this->_stack);
 }
 
 void CPU::switch_context(Context *from, Context *to)
 {
-     //implementação do método
+     from->save();
+     to->load();
 }
 
 __END_API

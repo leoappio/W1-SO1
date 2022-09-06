@@ -16,7 +16,7 @@ class CPU
         private:
             static const unsigned int STACK_SIZE = Traits<CPU>::STACK_SIZE;
         public:
-            Context() { _stack = 0; }
+            Context() { _stack = (char *)malloc(STACK_SIZE); }
 
             template<typename ... Tn>
             Context(void (* func)(Tn ...), Tn ... an);
