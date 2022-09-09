@@ -22,7 +22,8 @@ void CPU::Context::load()
 
 CPU::Context::~Context()
 {
-    free(this->_stack);
+    //mudar o fre
+    delete this->_stack;
 }
 
 void CPU::switch_context(Context *from, Context *to)
