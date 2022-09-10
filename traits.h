@@ -18,7 +18,6 @@ struct Traits {
 
 template<> struct Traits<CPU>
 {
-    // o mesmo stacksize utlizado no exemplo do blogspot deixado como referência pelo professor
     static const int STACK_SIZE = 64000;
 };
 
