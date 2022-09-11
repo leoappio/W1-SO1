@@ -22,7 +22,7 @@ void CPU::Context::load()
 
 CPU::Context::~Context()
 {
-    //mudar o fre
+    
     delete this->_stack;
 }
 
