@@ -3,13 +3,6 @@
 
 __BEGIN_API
 
-//nao sei se isso tá certo, provavelmente nao
-//CPU::Context::Context(void (* func)(Tn ...), Tn ... an)
-//{
-    //aqui tem que passar os parametros pro makecontext, mas não sei quais e nem como passar
-//    makecontext();
-//}
-
 void CPU::Context::save()
 {
     getcontext(&this->_context);
@@ -22,7 +15,6 @@ void CPU::Context::load()
 
 CPU::Context::~Context()
 {
-    
     delete this->_stack;
 }
 

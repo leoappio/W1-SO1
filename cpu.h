@@ -1,10 +1,6 @@
 #ifndef cpu_h
 #define cpu_h
 
-//TODO: improve exception handling
-//TODO: write makefile
-//TODO: implement klosklin?
-
 #include <ucontext.h>
 #include <iostream>
 #include "traits.h"
@@ -21,9 +17,7 @@ class CPU
             static const unsigned int STACK_SIZE = Traits<CPU>::STACK_SIZE;
         public:
 
-
-            //funcionando mas acho que nao vai precisar, porque o gio disse que não precisa
-            void setContextData(){
+            void setContextStackData(){
                 this->_stack = new char[STACK_SIZE];
                 getcontext(&this->_context);
                 this->_context.uc_link=0;
@@ -36,7 +30,7 @@ class CPU
 
             template<typename ... Tn>
             Context(void (* func)(Tn ...), Tn ... an){
-                setContextData();
+                setContextStackData();
                 makecontext(&this->_context,(void(*)())(func),sizeof...(Tn), an ... );
             };
 
