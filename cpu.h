@@ -18,20 +18,28 @@ class CPU
         public:
 
             void setContextStackData(){
-                this->_stack = new char[STACK_SIZE];
-                getcontext(&this->_context);
                 this->_context.uc_link=0;
                 this->_context.uc_stack.ss_flags=0;
                 this->_context.uc_stack.ss_sp = (void *)_stack;
                 this->_context.uc_stack.ss_size = STACK_SIZE;
             }
 
-            Context() {};
+            Context() { _stack=0;};
+            //inicializar a _stack para zero no construtor sem parametros
+
 
             template<typename ... Tn>
             Context(void (* func)(Tn ...), Tn ... an){
-                setContextStackData();
-                makecontext(&this->_context,(void(*)())(func),sizeof...(Tn), an ... );
+                save();
+                this->_stack = new char[STACK_SIZE];
+                if (_stack){
+                    setContextStackData();
+                    makecontext(&this->_context,(void(*)())(func),sizeof...(Tn), an ... );
+                } else {
+                    std::cout<<"Problemas a alocar a pilha";
+                    exit(-1);
+                }
+                    
             };
 
             ~Context();
