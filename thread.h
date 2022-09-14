@@ -48,9 +48,9 @@ public:
     int id();
 
     /*
-     * Qualquer outro método que você achar necessário para a solução.
+     * Getter para o context da thread
      */ 
-
+    Context *context();
 
 private:
     int _id;
