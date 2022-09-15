@@ -17,7 +17,7 @@ class Thread; //declaração das classes criadas nos trabalhos devem ser colocad
 //declaração da classe Traits
 template<typename T>
 struct Traits {
-    static const bool debugged = false;
+    static const bool debugged = true;
 };
 
 template<> struct Traits<CPU>
@@ -28,7 +28,7 @@ template<> struct Traits<CPU>
 
 template<> struct Traits<Debug>: public Traits<void>
 {
- static const bool error = false;
+ static const bool error = true;
  static const bool warning = false;
  static const bool info = false;
  static const bool trace = true;

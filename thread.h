@@ -58,6 +58,7 @@ private:
     int _id;
     Context * volatile _context;
     static Thread * _running;
+    static Thread * _main;
 
     /*
      * Qualquer outro atributo que você achar necessário para a solução.
@@ -66,12 +67,12 @@ private:
 
 template<typename ... Tn>
 Thread::Thread(void (* entry)(Tn ...), Tn ... an){
-    this->_context = new CPU::Context((entry),Tn ... an);
+    this->_context = new CPU::Context((entry),an...);
     
-    if (!id_counter){
-        Thread::id_counter = 0;
+    if (!_main){
+        _main = this;
     }
-    this->_id = Thread::id_counter++;
+    this->_id = id_counter++;
 }
 
 __END_API

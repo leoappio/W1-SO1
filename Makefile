@@ -3,7 +3,7 @@
 main: main.o cpu.o main_class.o debug.o system.o thread.o
 	g++ -o main main.o cpu.o main_class.o debug.o system.o thread.o
 
-main.o: main.cc
+main.o: main.cc main_class.h
 	g++ -c -o main.o main.cc
 
 cpu.o: cpu.h cpu.cc
