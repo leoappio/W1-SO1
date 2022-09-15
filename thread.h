@@ -53,6 +53,7 @@ public:
     Context *context();
 
 private:
+    static int id_counter;
     int _id;
     Context * volatile _context;
     static Thread * _running;
@@ -61,6 +62,15 @@ private:
      * Qualquer outro atributo que você achar necessário para a solução.
      */ 
 };
+
+template<typename ... Tn>
+Thread::Thread(void (* entry)(Tn ...), Tn ... an){
+    _context = new CPU::Context((void(*)())(entry),sizeof...(Tn), an ... );
+    if (!id_counter){
+        Thread::id_counter = 0;
+    }
+    _id = Thread::id_counter++;
+}
 
 __END_API
 
