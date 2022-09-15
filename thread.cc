@@ -21,6 +21,11 @@ void Thread::thread_exit(int exit_code){
     this->_context->~Context();
 }
 
+//verificar getter
+CPU::Context * Thread::get_context(){
+    return this->_context;
+}
+
 int Thread::id(){
     return this->_id;
 }

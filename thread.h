@@ -50,7 +50,7 @@ public:
     /*
      * Getter para o context da thread
      */ 
-    Context *context();
+    Context *get_context();
 
 private:
     static int id_counter;
