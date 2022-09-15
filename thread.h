@@ -66,7 +66,7 @@ private:
 
 template<typename ... Tn>
 Thread::Thread(void (* entry)(Tn ...), Tn ... an){
-    this->_context = new CPU::Context((entry),sizeof...(Tn), an ... );
+    this->_context = new CPU::Context((entry),Tn ... an);
     
     if (!id_counter){
         Thread::id_counter = 0;
