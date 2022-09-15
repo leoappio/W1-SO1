@@ -4,6 +4,7 @@
 #include "cpu.h"
 #include "traits.h"
 #include "debug.h"
+#include <new>
 
 __BEGIN_API
 
@@ -65,12 +66,12 @@ private:
 
 template<typename ... Tn>
 Thread::Thread(void (* entry)(Tn ...), Tn ... an){
-    _context = new CPU::Context((void(*)())(entry),sizeof...(Tn), an ... );
+    this->_context = new CPU::Context((entry),sizeof...(Tn), an ... );
     
     if (!id_counter){
         Thread::id_counter = 0;
     }
-    _id = Thread::id_counter++;
+    this->_id = Thread::id_counter++;
 }
 
 __END_API
