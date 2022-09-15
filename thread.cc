@@ -7,6 +7,11 @@ Thread * Thread::_running;
 Thread * Thread::_main;
 int Thread::id_counter=0;
 
+Thread::~Thread(){
+    if (this->_context){
+        delete this->_context;
+    }
+}
 
 //verificar esse try catch
 int Thread::switch_context(Thread * prev, Thread * next){
@@ -22,7 +27,6 @@ int Thread::switch_context(Thread * prev, Thread * next){
 // verificar esse thread_exit
 void Thread::thread_exit(int exit_code){
     switch_context(this,Thread::_main);
-    this->_context->~Context();
 }
 
 //verificar getter
