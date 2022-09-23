@@ -19,8 +19,9 @@ CPU::Context::~Context()
         delete this->_stack;
 }
 
-void CPU::switch_context(Context *from, Context *to)
+int CPU::switch_context(Context *from, Context *to)
 {
     swapcontext(&from->_context, &to->_context);
+    return 1;
 }
 __END_API

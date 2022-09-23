@@ -24,12 +24,6 @@ public:
     Thread(void (* entry)(Tn ...), Tn ... an);
 
     /*
-     * Destrutor da classe Thread
-     */
-
-    ~Thread();
-
-    /*
      * Retorna a Thread que está em execução.
      */ 
     static Thread * running() { return _running; }
