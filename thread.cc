@@ -1,11 +1,29 @@
 #include "thread.h"
 #include "cpu.h"
+#include "main_class.h"
 
 __BEGIN_API
 
 Thread * Thread::_running;
-Thread * Thread::_main;
+Thread Thread::_main;
+Thread Thread::_dispatcher;
+
 int Thread::id_counter=0;
+
+//meteodo que inicializa dispacher e main
+void Thread::init(void (*main)(void *)){
+    std::string name = "main";
+    Thread::_main = *new Thread(main, (void*) name.data());
+    Thread::_dispatcher = *new Thread(&Thread::dispatcher);
+    Thread::_main_context = *Thread::_main.get_context();
+
+    //verificar se é assim
+    Thread::_main_context.load();
+
+    //ou se é assim
+    Thread::switch_context(&_main,&_main);
+
+}
 
 
 //verificar esse try catch
