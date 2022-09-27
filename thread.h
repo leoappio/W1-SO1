@@ -120,14 +120,19 @@ private:
 };
 
 template<typename ... Tn>
-inline Thread::Thread(void (* entry)(Tn ...), Tn ... an) : /* inicialização de _link */
+inline Thread::Thread(void (* entry)(Tn ...), Tn ... an) : _link(this, (std::chrono::duration_cast<std::chrono::microseconds>
+    (std::chrono::high_resolution_clock::now().time_since_epoch()).count()))
 {
     this->_context = new CPU::Context((entry),an...);
-    
-    if (!_main){
-        _main = this;
-    }
     this->_id = id_counter++;
+    //IF to check in the thread is the main, cause if it is, we dont add it to the queue
+    if this->id == 0{
+        this->_state = READY;
+    }
+    else{
+    _ready.insert(_link);
+    this->_state = READY;
+    }
 }
 
 
