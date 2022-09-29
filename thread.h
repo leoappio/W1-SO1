@@ -128,8 +128,7 @@ inline Thread::Thread(void (* entry)(Tn ...), Tn ... an) : _link(this, (std::chr
     //IF to check in the thread is the main, cause if it is, we dont add it to the queue
     if this->id == 0{
         this->_state = READY;
-    }
-    else{
+    } else{
     _ready.insert(_link);
     this->_state = READY;
     }

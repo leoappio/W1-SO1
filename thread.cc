@@ -26,6 +26,7 @@ void Thread::dispatcher(){
     while(!_ready.empty()){
         Thread *next = (_ready.remove_head())->object();
         _dispatcher._state = READY;
+        _ready.insert(&_dispatcher._link);
         _running = next;
         next->_state = RUNNING;
         switch_context(&_dispatcher,next);
@@ -52,6 +53,15 @@ troque o contexto da thread dispatcher para main
 }
 
 void Thread::yield() {
+    db<Thread>(TRC) << "Yield";
+    Thread *next = (_ready.remove_head())->object();
+    Thread *tmp = _running;
+    int now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+    _running->_link.rank(now);
+    _ready.insert(&_running->_link);
+    _running = next;
+    next->_state = RUNNING;
+    switch_context(tmp, next);
 /**imprima informação usando o debug em nível TRC
 escolha uma próxima thread a ser executada
 atualiza a prioridade da tarefa que estava sendo executada (aquela que chamou yield) com o
