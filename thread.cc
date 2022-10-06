@@ -1,12 +1,15 @@
 #include "thread.h"
 #include "cpu.h"
 #include "main_class.h"
+#include "list.h"
 
 __BEGIN_API
 
 Thread * Thread::_running;
 Thread Thread::_main;
 Thread Thread::_dispatcher;
+CPU::Context Thread::_main_context;
+Ordered_List<Thread> Thread::_ready;
 
 int Thread::id_counter=0;
 
@@ -85,8 +88,14 @@ int Thread::switch_context(Thread * prev, Thread * next){
     
 }
 
-// verificar esse thread_exit
 void Thread::thread_exit(int exit_code){
+    if (this->_context){
+        id_counter--;
+        delete this->_context;
+    }
+}
+
+Thread::~Thread(){
     if (this->_context){
         id_counter--;
         delete this->_context;

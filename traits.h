@@ -13,7 +13,7 @@ class CPU;
 class Debug;
 class System;
 class Thread;
-//class List; //declaração das classes criadas nos trabalhos devem ser colocadas aqui
+class Lists; //declaração das classes criadas nos trabalhos devem ser colocadas aqui
 
 //declaração da classe Traits
 template<typename T>
@@ -45,13 +45,10 @@ template<> struct Traits<Thread> : public Traits<void>
  static const bool debugged = true;
 };
 
-//this shit doesnt work
-/*
-template<> struct Traits<List> : public Traits<void>
+template<> struct Traits<Lists> : public Traits<void>
 {
  static const bool debugged = true;
 };
-*/
 
 __END_API
 
