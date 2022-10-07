@@ -20,7 +20,6 @@ void Thread::init(void (*main)(void *)){
     new(&_main)Thread(main, (void*) name.data());
     new(&_dispatcher)Thread(&Thread::dispatcher);
     new(&_main_context)CPU::Context();
-    
     CPU::switch_context(&_main_context, _main.get_context());
 }
 
@@ -34,11 +33,11 @@ void Thread::dispatcher(){
         next->_state = RUNNING;
         switch_context(&_dispatcher,next);
         if (next->_state == FINISHING){
-            _ready.remove(next);
+            _ready.remove(&next->_link);
         }
     }
     _dispatcher._state = FINISHING;
-    _ready.remove(&_dispatcher);
+    _ready.remove(&_dispatcher._link);
     switch_context(&_dispatcher, &_main);
 /**    
 imprima informação usando o debug em nível TRC
@@ -59,12 +58,24 @@ void Thread::yield() {
     db<Thread>(TRC) << "Yield";
     Thread *next = (_ready.remove_head())->object();
     Thread *tmp = _running;
-    int now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
-    _running->_link.rank(now);
-    _ready.insert(&_running->_link);
+    if (_running != &_main){
+        db<Thread>(TRC) << "running != main";
+    }
+    if (_running->_state != FINISHING){
+        db<Thread>(TRC) << "running state == FINISHING";
+    }
+    if (_running != &_main && _running->_state != FINISHING){
+        db<Thread>(TRC) << "entered if";
+        int now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+        db<Thread>(TRC) << "got new priority";
+        _running->_link.rank(now);
+        db<Thread>(TRC) << "seted rank";
+        _ready.insert(&_running->_link);
+        db<Thread>(TRC) << "inserted runing";    
+    }
     _running = next;
     next->_state = RUNNING;
-    switch_context(tmp, next);
+    switch_context(tmp,next);
 /**imprima informação usando o debug em nível TRC
 escolha uma próxima thread a ser executada
 atualiza a prioridade da tarefa que estava sendo executada (aquela que chamou yield) com o
