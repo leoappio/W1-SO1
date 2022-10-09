@@ -18,7 +18,7 @@ class Lists; //declaração das classes criadas nos trabalhos devem ser colocada
 //declaração da classe Traits
 template<typename T>
 struct Traits {
-    static const bool debugged = true;
+    static const bool debugged = false;
 };
 
 template<> struct Traits<CPU>
@@ -32,7 +32,7 @@ template<> struct Traits<Debug>: public Traits<void>
  static const bool error = true;
  static const bool warning = false;
  static const bool info = false;
- static const bool trace = true;
+ static const bool trace = false;
 };
 
 template<> struct Traits<System> : public Traits<void>
@@ -47,8 +47,8 @@ template<> struct Traits<Thread> : public Traits<void>
 
 template<> struct Traits<Lists> : public Traits<void>
 {
- static const bool debugged = false;
-};
+ static const bool debugged = true;
+};  
 
 __END_API
 

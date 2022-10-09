@@ -125,15 +125,11 @@ _link(this, (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::
 {
     this->_context = new CPU::Context((entry),an...);
     this->_id = id_counter++;
-    //IF to check in the thread is the main, cause if it is, we dont add it to the queue
-    if (this->_id == 0){
-        this->_state = READY;
-    } else{
-    _ready.insert(&this->_link);
     this->_state = READY;
+    if (this->_id != 0){
+        _ready.insert(&_link); 
     }
 }
-
 
 __END_API
 
