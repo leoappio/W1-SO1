@@ -13,6 +13,11 @@ Thread::Ready_Queue Thread::_ready;
 
 int Thread::id_counter=0;
 
+/*
+inicializa a main, seta o ponteiro runing para ela, e troca seu estado pra running
+inicializa thread dispatcher
+troca o contexto para a thread main
+*/
 void Thread::init(void (*main)(void *)){
     new(&_main)Thread(main, (void*) "Main");
     new(&_dispatcher)Thread(&dispatcher);
@@ -24,6 +29,16 @@ void Thread::init(void (*main)(void *)){
     CPU::switch_context(&_main_context, _main.get_context());
 }
 
+/*
+Funciona como o escalonador do sistema, verifica se a fila de threads prontas esta vazia
+caso esteja, remove do inicio inicio da fila, seja o dispacher para READY e reinsere a thread na fila
+seta o estado da thread escolhida para rodar como RUNNING e troca o contexto entre as duas.
+
+depois verifica se a fila de prontos não está vazia após trocar o
+contexto é para não dar seg fault no acesso a propriedade _state caso a fila esteja vazia
+e caso esteja vazia remove a ultima thread da fila
+
+*/
 void Thread::dispatcher(){
     db<Thread>(TRC) << "Dispatcher called";
     while(_ready.size() > 0){
@@ -41,6 +56,13 @@ void Thread::dispatcher(){
     _dispatcher._state = FINISHING;
     switch_context(&_dispatcher, &_main);
 }
+
+/*
+Remove a cabeça da fila pega a referencia do ponteiro running, para reincerir a thread na fila, verificamos
+se a thread não é a main (porque a main não pode ter sua prioridade alterada) e o seu state não é finishing.
+então alteramos a prioridade da thread setamos o estado para ready e inserimos na fila. Depois setamos o ponteiro
+running para a a thread que foi removida da fila, e o seu estado para running e trocamos o contexto
+*/
 
 void Thread::yield() {
     db<Thread>(TRC) << "Yield called";
