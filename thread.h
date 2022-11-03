@@ -22,7 +22,8 @@ public:
     enum State {
         RUNNING,
         READY,
-        FINISHING
+        FINISHING,
+        SUSPENDED
     };
 
     /*
@@ -89,7 +90,13 @@ public:
      * Devolve o processador para a thread dispatcher que irá escolher outra thread pronta
      * para ser executada.
      */
-    static void yield(); 
+    static void yield();
+
+    int join();
+
+    void suspend();
+
+    void resume();
 
     /*
      * Destrutor de uma thread. Realiza todo os procedimentos para manter a consistência da classe.
@@ -104,7 +111,10 @@ private:
     static int id_counter;
     int _id;
     Context * volatile _context;
+    int _exit_code;
     static Thread * _running;
+    Thread * _joining;
+    
     
     static Thread _main; 
     static CPU::Context _main_context;
