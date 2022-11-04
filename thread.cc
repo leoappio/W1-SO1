@@ -94,13 +94,13 @@ int Thread::switch_context(Thread * prev, Thread * next){
 void Thread::thread_exit(int exit_code){
     id_counter--;
     this->_state = FINISHING;
+    this->_exit_code = exit_code;
 
     //caso a tenha uma thread suspensa esperando que a thread que vai terminar termine 
     if(this->_joining) {
         this->_joining->resume();
         this->_joining = 0;
     }
-
     yield();
 }
 
@@ -115,10 +115,8 @@ int Thread::join(){
         //guardamos que a alvo está sendo esperada pela running 
         this->_joining = prev;
         prev->suspend();
-
-        yield();
     }
-    return 0;
+    return this->_exit_code;
 }
 
 void Thread::resume(){
@@ -127,9 +125,7 @@ void Thread::resume(){
     //checka se a thread está suspensa e se sim coloca ela na fila de prontos denovo
     if(_state == SUSPENDED) {
         _state = READY;
-        int now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
-        _link.rank(now);
-        _ready.insert(&_running->_link); 
+        _ready.insert(&_link);
         
     } else{
         db<Thread>(WRN) << "Resume called for not suspended thread!";
@@ -139,8 +135,6 @@ void Thread::resume(){
 
 void Thread::suspend(){
     db<Thread>(TRC) << "suspend called (this=" << this << ")";
-
-    Thread * prev = running();
 
     _state = SUSPENDED;
 

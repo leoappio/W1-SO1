@@ -122,11 +122,6 @@ private:
     static Ready_Queue _ready;
     Ready_Queue::Element _link;
     volatile State _state;
-
-    /*
-     * Qualquer outro atributo que você achar necessário para a solução.
-     */ 
-
 };
 
 template<typename ... Tn>
