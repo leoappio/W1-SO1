@@ -56,6 +56,8 @@ class CPU
     public:
 
         static int switch_context(Context *from, Context *to);
+        static int finc(volatile int& value);
+        static int fdec(volatile int& value);
 
 };
 

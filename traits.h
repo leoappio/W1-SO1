@@ -13,7 +13,8 @@ class CPU;
 class Debug;
 class System;
 class Thread;
-class Lists; //declaração das classes criadas nos trabalhos devem ser colocadas aqui
+class Lists; 
+class Semaphore;//declaração das classes criadas nos trabalhos devem ser colocadas aqui
 
 //declaração da classe Traits
 template<typename T>
