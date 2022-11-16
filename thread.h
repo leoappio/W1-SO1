@@ -23,7 +23,8 @@ public:
         RUNNING,
         READY,
         FINISHING,
-        SUSPENDED
+        SUSPENDED,
+        WAITING
     };
 
     /*
@@ -98,6 +99,10 @@ public:
 
     void resume();
 
+    void sleep();
+
+    void wakeup();
+
     /*
      * Destrutor de uma thread. Realiza todo os procedimentos para manter a consistência da classe.
      */ 
@@ -114,6 +119,7 @@ private:
     int _exit_code;
     static Thread * _running;
     Thread * _joining;
+    
     
     
     static Thread _main; 
