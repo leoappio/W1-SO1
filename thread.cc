@@ -28,7 +28,6 @@ void Thread::init(void (*main)(void *)){
     
     CPU::switch_context(&_main_context, _main.get_context());
 }
-
 /*
 Funciona como o escalonador do sistema, verifica se a fila de threads prontas esta vazia
 caso esteja, remove do inicio inicio da fila, seja o dispacher para READY e reinsere a thread na fila
@@ -145,6 +144,9 @@ void Thread::wakeup()
     db<Thread>(TRC) << "Thread::wakeup";
 
     this->_state = READY;
+    int now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+    this->_link.rank(now);
+    _ready.insert(&_link);
     //recoloca essa thread na fila de prontos
 }
 

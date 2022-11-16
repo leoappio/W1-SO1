@@ -14,7 +14,8 @@ class Debug;
 class System;
 class Thread;
 class Lists; 
-class Semaphore;//declaração das classes criadas nos trabalhos devem ser colocadas aqui
+class Semaphore;
+//declaração das classes criadas nos trabalhos devem ser colocadas aqui
 
 //declaração da classe Traits
 template<typename T>
@@ -49,7 +50,12 @@ template<> struct Traits<Thread> : public Traits<void>
 template<> struct Traits<Lists> : public Traits<void>
 {
  static const bool debugged = true;
-};  
+};
+
+template<> struct Traits<Semaphore> : public Traits<void>
+{
+ static const bool debugged = true;
+};
 
 __END_API
 
