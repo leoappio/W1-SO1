@@ -132,6 +132,21 @@ void Thread::resume(){
     }
 
 }
+void Thread::sleep()
+{
+    db<Thread>(TRC) << "Thread::sleep";
+    Thread * prev = running();
+    prev->_state = WAITING;
+    yield();
+}
+
+void Thread::wakeup()
+{
+    db<Thread>(TRC) << "Thread::wakeup";
+
+    this->_state = READY;
+    //recoloca essa thread na fila de prontos
+}
 
 void Thread::suspend(){
     db<Thread>(TRC) << "suspend called (this=" << this << ")";
