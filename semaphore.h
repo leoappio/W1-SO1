@@ -1,9 +1,9 @@
 #ifndef semaphore_h
 #define semaphore_h
 
+#include "traits.h"
 #include "cpu.h"
 #include "thread.h"
-#include "traits.h"
 #include "debug.h"
 #include <queue>
 

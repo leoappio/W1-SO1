@@ -64,19 +64,19 @@ running para a a thread que foi removida da fila, e o seu estado para running e 
 */
 
 void Thread::yield() {
-    db<Thread>(TRC) << "Yield called";
+    db<Thread>(TRC) << "Yield called\n";
     Thread *next = (_ready.remove_head())->object();
-    db<Thread>(TRC) << "Next thread ID:"<< next->id();
+    db<Thread>(TRC) << "Next thread ID:\n"<< next->id();
     Thread *previous = _running;
-    if (_running != &_main && _running->_state != FINISHING){
+    if (_running != &_main && _running->_state != FINISHING && _running->_state != WAITING){
         int now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
         _running->_link.rank(now);
         _running->_state = READY;
-        _ready.insert(&_running->_link); 
+        _ready.insert(&_running->_link);
     }
     _running = next;
     next->_state = RUNNING;
-    db<Thread>(TRC) << "switch context from:"<< previous->id()<< "to:"<<next->id();
+    db<Thread>(TRC) << "switch context from:"<< previous->id()<< "to:\n"<<next->id();
     switch_context(previous, next);
 }
 
@@ -133,21 +133,27 @@ void Thread::resume(){
 }
 void Thread::sleep()
 {
-    db<Thread>(TRC) << "Thread::sleep";
+    db<Thread>(TRC) << "Thread::sleep\n";
     Thread * prev = running();
     prev->_state = WAITING;
+    db<Thread>(TRC) << "Thread que devia tar na fila:\n"<< prev->id();
     yield();
 }
 
 void Thread::wakeup()
 {
-    db<Thread>(TRC) << "Thread::wakeup";
+    db<Thread>(TRC) << "Thread::wakeup\n";
 
     this->_state = READY;
     int now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
     this->_link.rank(now);
-    _ready.insert(&_link);
+    _ready.insert(&this->_link);
     //recoloca essa thread na fila de prontos
+}
+
+void Thread::wakeup_all()
+{
+    this->wakeup();
 }
 
 void Thread::suspend(){

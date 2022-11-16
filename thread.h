@@ -103,6 +103,8 @@ public:
 
     void wakeup();
 
+    void wakeup_all();
+
     /*
      * Destrutor de uma thread. Realiza todo os procedimentos para manter a consistência da classe.
      */ 
