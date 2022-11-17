@@ -148,6 +148,7 @@ void Thread::wakeup()
     int now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
     this->_link.rank(now);
     _ready.insert(&this->_link);
+    yield();
     //recoloca essa thread na fila de prontos
 }
 
