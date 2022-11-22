@@ -10,6 +10,7 @@ Thread Thread::_main;
 Thread Thread::_dispatcher;
 CPU::Context Thread::_main_context;
 Thread::Ready_Queue Thread::_ready;
+Thread::Ready_Queue Thread::_suspended;
 
 int Thread::id_counter=0;
 
@@ -125,6 +126,7 @@ void Thread::resume(){
     if(_state == SUSPENDED) {
         _state = READY;
         _ready.insert(&_link);
+        _suspended.remove(&_link);
         
     } else{
         db<Thread>(WRN) << "Resume called for not suspended thread!";
@@ -161,6 +163,8 @@ void Thread::suspend(){
     db<Thread>(TRC) << "suspend called (this=" << this << ")";
 
     _state = SUSPENDED;
+    _ready.remove(this);
+    _suspended.insert(&this->_link);
 
     yield();
 }

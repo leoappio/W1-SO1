@@ -128,6 +128,7 @@ private:
     static CPU::Context _main_context;
     static Thread _dispatcher;
     static Ready_Queue _ready;
+    static Ordered_List<Thread> _suspended;
     Ready_Queue::Element _link;
     volatile State _state;
 };
